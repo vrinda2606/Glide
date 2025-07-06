@@ -1,0 +1,81 @@
+//Print the output in servicenow
+gs.info("VS");
+gs.print("Vri");
+
+
+//basic func
+var inc = new GlideRecord ('incident');  //GlideRecord is main Oject and Incident is Table
+inc.query ();      // to fetch all the records
+while (inc.next ()) {
+   gs.print (inc.number); //Printing all incidets
+}
+
+
+//to get the row count 
+inc.getRowCount();
+
+
+//addQuery()
+inc.addQuery ('priority=1');
+//or
+inc.addQuery('String','Operator','Value') //('priority','=','1'); // or ('priority','1')
+//can also pass multiple queries in it, by adding multiple inc.addQuery() func in the code.
+/*
+  can be anything in the operator place
+  =, !=, <=, >=, <, >, IN, NOT IN, STARTSWITH, ENDSWITH, CONTAINS, DOES NOT CONTAIN, INSTANCEOF
+*/
+var cat = ['software', 'hardware'];
+inc.addQuery('category', 'IN', cat);  
+// Print where category is Software and Hardware
+
+
+//or else pass addEncodedQuery()
+inc.addEncodedQuery('active=true^ORcategory=software^priority=1');
+//can also store the value in a variable and then pass it.
+var a = 'active=true^ORcategory=software^priority=1';
+inc.addEncodedQuery(a);
+
+
+// Instead of use active=true this method directly we can use addActiveQuery
+inc.addActiveQuery();
+//active = false
+inc.addInactiveQuery();
+
+
+//to get the encodedQuery that we have given
+gs.print (inc.getEncodedQuery ());
+
+
+//orderBy()
+inc.orderBy('short_description');
+//orderByDesc()
+inc.orderByDesc('short_description');
+
+//limit the number of records you want to fetch
+inc.setLimit(10);
+
+//similar to addQuery() only difference being that it returns only one record while addQuery returns more records.
+inc.get('number','INC0009005');
+inc.get('sys_id','eryggfjkdlkjsfsdgfhgrskgjkrdgkherkjg'); //('sys_id', gs.getUserID() )
+
+
+//to get records between 0 and 5, including 0 but excluding 5
+inc.chooseWindow(0,5);
+
+//to get the table name
+inc.getTableName();
+
+//to get the value
+getValue('number') // e.g. INC0008001, INC0008002, so on
+//to get display name
+getDisplayValue('short_description');
+
+
+//to check whether next record exists or not
+inc.hasNext();
+
+//to get the primary key of record(usually sys_id unless specified);
+inc.getUniqueValue();
+
+//This method is used to set the value of the specific field with the specified value. 
+inc.setValue('short_description','Critical VPN Issue');
