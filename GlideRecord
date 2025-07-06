@@ -79,3 +79,12 @@ inc.getUniqueValue();
 
 //This method is used to set the value of the specific field with the specified value. 
 inc.setValue('short_description','Critical VPN Issue');
+
+
+//This is used to get the specified column of the current record.  --> getElement()
+var elementName = 'short_description'
+var inc = new GlideRecord('incident');
+inc.initialize();
+inc.setValue (elementName,'I am facing VPN Problem');
+inc.insert ();
+gs.print(inc.getElement('short_description'));
