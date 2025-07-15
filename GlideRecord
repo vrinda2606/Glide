@@ -91,7 +91,8 @@ inc.initialize();
 inc.setValue(elementName, 'I am facing VPN Problem');
 inc.insert();
 gs.print(inc.getElement('short_description')); //but the sysid sometimes....as in case of caller_id as it is a reference field.
-
+//getElement --> returns a complete glideElement object
+// inc.getElement('short_description') is equivalent to inc.short_description
 
 
 //get table name
@@ -114,6 +115,8 @@ gs.print(inc.isValidField('category'));
 
 
 //getLink() and getProperty() 
+//getLink() --> URL of the current record.
+
 var inc = new GlideRecord('incident');
 inc.addActiveQuery();
 inc.addQuery('category', 'software');
@@ -122,6 +125,9 @@ inc.query();
 while (inc.next()) {
   gs.print(gs.getProperty('glide.servlet.uri') + inc.getLink(false));
 }
+
+//getLocation()
+// Retrieves the row number of the current record within the table.
 
 
 //tells whether the record exists or not isValidRecord()
@@ -174,11 +180,10 @@ table.*/
 var inc = new GlideRecord('incident');
 gs.print(inc.canCreate());
 
-//Determines if the Access Control Rules, which
-// include the user's roles, permit reading records in this
-// table.
+//Determines if the Access Control Rules, which include the user's roles, permit reading records in this table.
 var inc = new GlideRecord('incident');
 gs.print(inc.canRead());
+/*You shouldn’t use this method to check for table-level access. A single call to this method might not be sufficient to get a conclusive table-level access rights check result. To perform a table-level access check, use the GlideSecurityManager.hasRightsTo() method.*/
 
 // Determines if the Access Control Rules, which
 // include the user's roles, permit editing records in this table.
@@ -191,3 +196,17 @@ gs.print(inc.canWrite());
 // table.
 var inc = new GlideRecord('incident');
 gs.print(inc.canDelete());
+
+//setAbortAction(true) --> Sets a flag to indicate if the next database action (insert, update, delete) is to be aborted.
+/*Use in an onBefore business rule to prevent the database action from being done. The business rule continues to run after setAbortAction() is called.*/
+
+
+//setWorkFlow(boolean) --> Enables or disables the running of business rules that might normally be triggered by subsequent actions. If the e parameter is set to false, an insert/update will not be audited. Auditing only happens when the parameter is set to true for a GlideRecord operation.
+//autoSysFields(boolean) --> Enables or disables the update to the fields sys_updated_by, sys_updated_on, sys_mod_count, sys_created_by, and sys_created_on. This is often used for manually updating field values on a record while leaving historical information unchanged.
+
+
+//addJoinQuery() --> not a true database join; rather, addJoinQuery() adds a subquery.
+/*Find problems that have an incident attached. This example returns problems that have associated incidents. However, it won't pull values from the incidents that are returned as a part of the query.*/
+var prob = new GlideRecord('problem');
+prob.addJoinQuery('incident');
+prob.query();
